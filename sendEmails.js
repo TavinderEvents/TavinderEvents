@@ -18,6 +18,8 @@ const FIREBASE_CONFIG = {
   measurementId: "G-7RYTW534N1"
 };
 
+console.log(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+
   // const serviceAccountKey = Buffer.from(
   //   FIREBASE_CONFIG
   // ).toString("utf8");
