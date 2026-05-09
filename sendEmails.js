@@ -8,7 +8,17 @@
     process.env.FIREBASE_SERVICE_ACCOUNT_KEY,
     "base64"
   ).toString("utf8");
-  const serviceAccount = JSON.parse(serviceAccountKey);
+
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDAHhKZEFIm4Z1HyTRGCaqJ1NGC7KelQ38",
+  authDomain: "tavinderevents.firebaseapp.com",
+  projectId: "tavinderevents",
+  storageBucket: "tavinderevents.firebasestorage.app",
+  messagingSenderId: "62017081718",
+  appId: "1:62017081718:web:503ed1151d3235f719aa57",
+  measurementId: "G-7RYTW534N1"
+};
+  const serviceAccount = JSON.parse(FIREBASE_CONFIG);
 
   // const FIREBASE_CONFIG = {
   //   apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",
@@ -20,15 +30,7 @@
   //   appId: "1:1335908909:web:0c132d7c79008c490c36a4",
   //   measurementId: "G-BQG1N754TN",
   // };
-  const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDAHhKZEFIm4Z1HyTRGCaqJ1NGC7KelQ38",
-  authDomain: "tavinderevents.firebaseapp.com",
-  projectId: "tavinderevents",
-  storageBucket: "tavinderevents.firebasestorage.app",
-  messagingSenderId: "62017081718",
-  appId: "1:62017081718:web:503ed1151d3235f719aa57",
-  measurementId: "G-7RYTW534N1"
-};
+  
 
   const EMAILJS_SERVICE_ID = "service_jitwsrj";
   const EMAILJS_TEMPLATE_ID = "template_m0u22pm";
