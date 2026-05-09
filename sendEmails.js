@@ -4,10 +4,10 @@
   require("dotenv").config(); // Load environment variables from .env file
 
   // Load Firebase service account key from environment variable
-  const serviceAccountKey = Buffer.from(
-    process.env.FIREBASE_SERVICE_ACCOUNT_KEY,
-    "base64"
-  ).toString("utf8");
+  // const serviceAccountKey = Buffer.from(
+  //   process.env.FIREBASE_SERVICE_ACCOUNT_KEY,
+  //   "base64"
+  // ).toString("utf8");
 
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyDAHhKZEFIm4Z1HyTRGCaqJ1NGC7KelQ38",
