@@ -18,7 +18,12 @@ const FIREBASE_CONFIG = {
   appId: "1:62017081718:web:503ed1151d3235f719aa57",
   measurementId: "G-7RYTW534N1"
 };
-  const serviceAccount = JSON.parse(FIREBASE_CONFIG);
+
+  const serviceAccountKey = Buffer.from(
+    FIREBASE_CONFIG
+  ).toString("utf8");
+
+  const serviceAccount = JSON.parse(serviceAccountKey);
 
   // const FIREBASE_CONFIG = {
   //   apiKey: "AIzaSyCfbqC-893YBqhgR5OR0eHyX-EXzCIoTC8",
