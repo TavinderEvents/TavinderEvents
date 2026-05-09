@@ -20,7 +20,7 @@
   //   appId: "1:1335908909:web:0c132d7c79008c490c36a4",
   //   measurementId: "G-BQG1N754TN",
   // };
-  const firebaseConfig = {
+  const FIREBASE_CONFIG = {
   apiKey: "AIzaSyDAHhKZEFIm4Z1HyTRGCaqJ1NGC7KelQ38",
   authDomain: "tavinderevents.firebaseapp.com",
   projectId: "tavinderevents",
