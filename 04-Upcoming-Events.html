@@ -156,6 +156,7 @@
                 <th>To</th>
                 <th>Email</th>
                 <th>Occasion</th>
+                            <th>Reminder Message</th>
                 <th>Date</th>
                 <th>Days Left</th>
             </tr>
@@ -179,6 +180,7 @@
                 <th>To</th>
                 <th>Email</th>
                 <th>Occasion</th>
+                <th>Reminder Message</th>
                 <th>Date</th>
                 <th>Days Left</th>
             </tr>
@@ -202,6 +204,7 @@
                 <th>To</th>
                 <th>Email</th>
                 <th>Occasion</th>
+                <th>Reminder Message</th>
                 <th>Date</th>
                 <th>Days Left</th>
             </tr>
@@ -270,6 +273,7 @@ function addRow(tableId, event, daysLeft) {
         <td>${event.To_Name || ""}</td>
         <td>${event.To_Email || ""}</td>
         <td>${event.Occasion || ""}</td>
+                <td>${event.Reminder_Message || ""}</td>
         <td>${formatDate(event.Date)}</td>
         <td>${daysLeft}</td>
     `;
