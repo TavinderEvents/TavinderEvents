@@ -6,172 +6,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Management</title>
 
-<style>
-    * {
-        box-sizing: border-box;
-    }
+    <style>
+        h1 {
+            color: #333;
+        }
 
-    body {
-        margin: 0;
-        padding: 10px;
-        font-family: Arial, sans-serif;
-    }
+        .form-group select {
+            display: block;
+            width: 100%;
+            align-items: center;
+            margin-bottom: 10px;
+        }
 
-    .container {
-        width: 100%;
-        max-width: 100%;
-    }
+        label {
+            margin-right: 10px;
+            width: 150px;
+        }
 
-    h1 {
-        color: #333;
-        text-align: center;
-    }
-
-    .form-group select {
-        display: block;
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    label {
-        margin-right: 10px;
-        width: 150px;
-        font-weight: bold;
-    }
-
-    input,
-    select {
-        flex: 1;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        width: 100%;
-        min-width: 0;
-    }
-
-    button {
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        background-color: maroon;
-        color: white;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background-color: darkred;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: maroon;
-        color: white;
-    }
-
-    table th,
-    table td {
-        padding: 8px;
-        border: 1px solid #ddd;
-    }
-
-    td span {
-        font-weight: bold;
-    }
-
-    table th {
-        white-space: nowrap;
-        line-height: 1.5;
-        background-color: #6c0202;
-        text-align: left;
-    }
-
-    table td {
-        padding: 10px;
-        text-align: left;
-        border: 1px solid white;
-    }
-
-    table tr {
-        margin-bottom: 20px;
-    }
-
-    #messageArea {
-        margin: 10px 0;
-        color: green;
-    }
-
-    /* Responsive table */
-    .table-responsive {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    #eventTable {
-        min-width: 1200px;
-    }
-
-    td button {
-        min-width: 70px;
-        margin: 2px;
-    }
-
-    .back-button {
-        margin-top: 15px;
-    }
-
-    /* Mobile View */
-    @media screen and (max-width: 768px) {
-
-        body {
+        input,
+        select {
+            flex: 1;
             padding: 5px;
-        }
-
-        h1,
-        h3 {
-            text-align: center;
-            font-size: 22px;
-        }
-
-        /* All form rows become vertical */
-        div[style*="display:flex"] {
-            flex-direction: column !important;
-            align-items: stretch !important;
-            gap: 5px !important;
-        }
-
-        div[style*="display:flex"] label {
-            width: 100% !important;
-            margin: 0 !important;
-        }
-
-        div[style*="display:flex"] input,
-        div[style*="display:flex"] select {
-            width: 100% !important;
-            flex: unset !important;
+            border: 1px solid #ccc;
+            border-radius: 3px;
         }
 
         button {
-            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: maroon;
+            color: white;
+            cursor: pointer;
         }
 
-        td button {
-            width: 100%;
-            margin-bottom: 5px;
+        button:hover {
+            background-color: darkred;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: maroon;
+            color: white;
+        }
+
+
 
         table th,
-        table td {
-            font-size: 12px;
-            padding: 6px;
+        td {
+            padding: 8px;
+            border: 1px solid #ddd;
         }
 
-        .back-button button {
-            width: 100%;
+
+
+        /* Add some spacing for each field label */
+        td span {
+            font-weight: bold;
         }
-    }
-</style>
+
+        table th {
+            white-space: nowrap;
+            line-height: 1.5;
+            background-color: #6c0202;
+            text-align: left;
+        }
+
+        table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid white;
+
+            width: 100%;
+            /* Make sure it takes up full width */
+        }
+
+        table tr {
+            margin-bottom: 20px;
+            /* Add spacing between events */
+        }
+
+
+
+
+        #messageArea {
+            margin: 10px 0;
+            color: green;
+        }
+    </style>
 </head>
 
 <body>
@@ -312,7 +235,6 @@
         </form>
 
         <h3>Event List</h3>
-        <div class="table-responsive">
         <table id="eventTable">
             <thead>
                 <tr>
@@ -334,7 +256,6 @@
             </thead>
             <tbody id="eventList"></tbody>
         </table>
-        </div>
     </div>
     <footer>
         <div class="back-button">
