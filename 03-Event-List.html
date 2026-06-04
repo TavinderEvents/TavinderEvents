@@ -61,6 +61,23 @@
                 font-size: 12px;
             }
         }
+        .filter-container input,
+.filter-container select {
+    padding: 6px;
+    min-width: 150px;
+}
+
+@media (max-width: 768px) {
+
+    .filter-container {
+        flex-direction: column;
+    }
+
+    .filter-container input,
+    .filter-container select {
+        width: 100%;
+    }
+}
     </style>
 </head>
 
@@ -69,16 +86,23 @@
 <div class="container">
     <h1>Event Management</h1>
 
-    <!-- Filters -->
-    <div class="filter-container">
-        <label>Occasion:</label>
+   <!-- Filters -->
+<div class="filter-container" style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:15px;">
+
+    <div>
+        <label>Name:</label><br>
+        <input type="text" id="nameFilter" placeholder="Search name...">
+    </div>
+
+    <div>
+        <label>Occasion:</label><br>
         <select id="occasionFilter">
             <option value="">All</option>
         </select>
     </div>
 
-    <div class="filter-container">
-        <label>Month:</label>
+    <div>
+        <label>Month:</label><br>
         <select id="monthFilter">
             <option value="">All</option>
             <option value="01">Jan</option>
@@ -95,6 +119,8 @@
             <option value="12">Dec</option>
         </select>
     </div>
+
+</div>
 
     <!-- Table -->
     <table>
@@ -136,6 +162,7 @@ const db = getFirestore(app);
 
 let selectedOccasion = "";
 let selectedMonth = "";
+let searchName = "";
 
 /* =========================
    MAIN FUNCTION (FIXED)
@@ -152,48 +179,79 @@ async function getEvent() {
             return;
         }
 
-        const events = snapshot.docs.map(doc => doc.data());
+const events = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+}));
 
         // FILTER
 const filteredEvents = events.filter(event => {
-    const date = event.Date || "";
 
-let month = "";
+    let month = "";
 
-if (event.Date) {
-    const d = new Date(event.Date);
-    if (!isNaN(d)) {
-        month = String(d.getMonth() + 1).padStart(2, "0");
+    if (event.Date) {
+        const d = new Date(event.Date);
+        if (!isNaN(d)) {
+            month = String(d.getMonth() + 1).padStart(2, "0");
+        }
     }
-}
 
-    const matchOccasion = selectedOccasion ? event.Occasion === selectedOccasion : true;
-    const matchMonth = selectedMonth ? month === selectedMonth : true;
+    const fromName = (event.From_Name || "").toLowerCase();
+    const toName = (event.To_Name || "").toLowerCase();
+    const email = (event.To_Email || "").toLowerCase();
+    const occasion = (event.Occasion || "").toLowerCase();
 
-    return matchOccasion && matchMonth;
+    const matchName = searchName
+        ? fromName.includes(searchName.toLowerCase()) ||
+          toName.includes(searchName.toLowerCase()) ||
+          email.includes(searchName.toLowerCase())||
+          occasion.includes(searchName.toLowerCase())
+        : true;
+
+    const matchOccasion = selectedOccasion
+        ? event.Occasion === selectedOccasion
+        : true;
+
+    const matchMonth = selectedMonth
+        ? month === selectedMonth
+        : true;
+
+    return matchName && matchOccasion && matchMonth;
 });
         // SORT
+// SORT
 filteredEvents.sort((a, b) => {
-    const snoA = Number(a.SNo) || 0;
-    const snoB = Number(b.SNo) || 0;
-    return snoA - snoB; // ascending
+    return (Number(a.SNo) || 0) - (Number(b.SNo) || 0);
 });
 
-        // DISPLAY
-        filteredEvents.forEach((event, index) => {
-            const row = document.createElement("tr");
+// REMOVE DUPLICATES BY SERIAL NUMBER
+const uniqueEvents = Array.from(
+    new Map(
+        filteredEvents.map(event => [
+            String(event.SNo).trim(), // normalize SNo
+            event
+        ])
+    ).values()
+);
 
-            row.innerHTML = `
-              <td>${event.SNo || ""}</td>
-                <td>${event.From_Name || ""}</td>
-                <td>${event.To_Name || ""}</td>
-                <td>${event.To_Email || ""}</td>
-                <td>${event.Occasion || ""}</td>
-                <td>${event.Date || ""}</td>
-            `;
 
-            eventList.appendChild(row);
-        });
+// Display records
+eventList.innerHTML = "";
+
+uniqueEvents.forEach(event => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+        <td>${event.SNo || ""}</td>
+        <td>${event.From_Name || ""}</td>
+        <td>${event.To_Name || ""}</td>
+        <td>${event.To_Email || ""}</td>
+        <td>${event.Occasion || ""}</td>
+        <td>${event.Date || ""}</td>
+    `;
+
+    eventList.appendChild(row);
+});
 
     } catch (error) {
         console.error("ERROR:", error);
@@ -238,6 +296,11 @@ document.getElementById("occasionFilter").addEventListener("change", e => {
 
 document.getElementById("monthFilter").addEventListener("change", e => {
     selectedMonth = e.target.value;
+    getEvent();
+});
+
+document.getElementById("nameFilter").addEventListener("input", e => {
+    searchName = e.target.value.trim();
     getEvent();
 });
 
