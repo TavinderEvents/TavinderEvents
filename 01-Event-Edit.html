@@ -453,12 +453,13 @@ padding: 6px 6px 6px 38%;
 
         async function getNextSNo() {
             const eventCollection = collection(db, "Event");
-            const q = query(eventCollection, orderBy("SNo", "desc"), limit(1));
-            const snapshot = await getDocs(q);
+ const q = query(eventCollection, orderBy("SNo"));
+const snapshot = await getDocs(q);
 
-            if (snapshot.empty) {
-                return 1;
-            }
+if (snapshot.empty) return 1;
+
+const last = snapshot.docs[snapshot.docs.length - 1].data().SNo || 0;
+return Number(last) + 1;
 
             const lastSNo = snapshot.docs[0].data().SNo || 0;
             return Number(lastSNo) + 1;
@@ -587,12 +588,11 @@ padding: 6px 6px 6px 38%;
                 reminderMessage.focus();
                 // reminderMessage = document.getElementById("Reminder_Message");   
 
-                sendEmail(
-                    To_Email1,
-                    Reminder_Message1,   // ✅ SUBJECT
-
-                    To_Name1
-                );
+sendEmail(
+    document.getElementById("To_Email").value,
+    document.getElementById("Reminder_Message").value,
+    document.getElementById("To_Name").value
+);
 
             }
 
@@ -737,34 +737,31 @@ padding: 6px 6px 6px 38%;
             messageArea.style.color = color;
             messageArea.textContent = message;
         }
-
+    function getTodayLocalDate() {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
         // Reset the form and change button text back to 'Save Event'
-        function resetForm() { currentDocId = null;
+       async function resetForm() {
+    currentDocId = null;
 
     document.getElementById("editForm").reset();
 
-    document.querySelector("button[type='submit']").textContent =
-        "Save Event";
-
-    // Show all fields again
     showAllFields();
 
-    // Re-enable all controls
     document.querySelectorAll("input, select").forEach(el => {
         el.disabled = false;
     });
 
-    // Set today's date
-    document.getElementById("Date").value =
-        new Date().toISOString().split('T')[0];
+    document.getElementById("Date").value = getTodayLocalDate();
 
-    // Get next serial number
-    setNextSNo();
+    await setNextSNo();
 
-    // Move cursor to first field
     document.getElementById("Occasion").focus();
-        }
-
+}
         // Edit Event
         window.editEvent = async function (docId, eventData) {
             eventData = JSON.parse(decodeURIComponent(eventData));
@@ -809,13 +806,18 @@ padding: 6px 6px 6px 38%;
         };
 
         // Initialize by fetching events
-await getEvent();
-await setNextSNo();
+getEvent();
+setNextSNo();
+document.getElementById('Date').value = getTodayLocalDate();
 
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('Date').value = new Date().toISOString().split('T')[0];
-        });
+window.addEventListener("DOMContentLoaded", async () => {
+    document.getElementById("Date").value = getTodayLocalDate();
 
+    await getEvent();
+    await setNextSNo();
+
+    document.getElementById("Occasion").focus();
+});
     </script>
 </body>
 
