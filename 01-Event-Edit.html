@@ -110,7 +110,7 @@ table th {
         border: none;
         border-bottom: 1px solid #ddd;
         position: relative;
-        padding: 8px 8px 8px 45%;
+padding: 6px 6px 6px 38%;
         text-align: left;
         min-height: 30px;
         word-break: break-word;
@@ -155,14 +155,12 @@ table th {
     }
 
     /* Responsive table */
-    .table-responsive {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
+.table-responsive {
+    width: 100%;
+}
 
-    #eventTable {
-        min-width: 1200px;
+    #eventTable {    width: 100%;
+                min-width: 1200px;
     }
 
     td button {
@@ -175,55 +173,77 @@ table th {
     }
 
     /* Mobile View */
-    @media screen and (max-width: 768px) {
+   @media screen and (max-width: 768px) {
 
-        body {
-            padding: 5px;
-        }
-
-        h1,
-        h3 {
-            text-align: center;
-            font-size: 22px;
-        }
-
-        /* All form rows become vertical */
-        div[style*="display:flex"] {
-            flex-direction: column !important;
-            align-items: stretch !important;
-            gap: 5px !important;
-        }
-
-        div[style*="display:flex"] label {
-            width: 100% !important;
-            margin: 0 !important;
-        }
-
-        div[style*="display:flex"] input,
-        div[style*="display:flex"] select {
-            width: 100% !important;
-            flex: unset !important;
-        }
-
-        button {
-            width: 100%;
-        }
-
-        td button {
-            width: 100%;
-            margin-bottom: 5px;
-        }
-
-        table th,
-        table td {
-            font-size: 12px;
-            padding: 6px;
-        }
-
-        .back-button button {
-            width: 100%;
-        }
+    body {
+        padding: 5px;
     }
+
+    h1,
+    h3 {
+        text-align: center;
+        font-size: 20px;
+        margin: 10px 0;
+    }
+
+    /* FORM: stack all fields vertically */
+    div[style*="display:flex"] {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 4px !important;
+        margin-bottom: 8px !important;
+    }
+
+    div[style*="display:flex"] label {
+        width: 100% !important;
+        margin: 0 !important;
+        font-size: 13px;
+    }
+
+    div[style*="display:flex"] input,
+    div[style*="display:flex"] select {
+        width: 100% !important;
+        flex: unset !important;
+        font-size: 13px;
+        padding: 6px;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    td button {
+        width: 100%;
+        margin-bottom: 4px;
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    table th,
+    table td {
+        font-size: 11px;
+        padding: 5px;
+    }
+
+    .back-button button {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    /* IMPORTANT: reduce table density */
+    #eventTable th,
+    #eventTable td {
+        word-break: break-word;
+    }
+
+    /* OPTIONAL: make table feel less wide */
+    #eventTable {
+        font-size: 11px;
+    }
+}
+
 </style>
 </head>
 
@@ -705,16 +725,30 @@ table th {
         }
 
         // Reset the form and change button text back to 'Save Event'
-        function resetForm() {
-            currentDocId = null;
-            document.getElementById('editForm').reset();
-            document.querySelector("button[type='submit']").textContent = "Save Event";
-            // 🔥 IMPORTANT: restore hidden fields
-            showAllFields();
+        function resetForm() { currentDocId = null;
 
-            const inputs = document.querySelectorAll("input, select");
-            inputs.forEach(el => el.disabled = false);
-            setNextSNo();
+    document.getElementById("editForm").reset();
+
+    document.querySelector("button[type='submit']").textContent =
+        "Save Event";
+
+    // Show all fields again
+    showAllFields();
+
+    // Re-enable all controls
+    document.querySelectorAll("input, select").forEach(el => {
+        el.disabled = false;
+    });
+
+    // Set today's date
+    document.getElementById("Date").value =
+        new Date().toISOString().split('T')[0];
+
+    // Get next serial number
+    setNextSNo();
+
+    // Move cursor to first field
+    document.getElementById("Occasion").focus();
         }
 
         // Edit Event
@@ -761,8 +795,8 @@ table th {
         };
 
         // Initialize by fetching events
-        getEvent();
-        setNextSNo();
+await getEvent();
+await setNextSNo();
 
         window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('Date').value = new Date().toISOString().split('T')[0];
