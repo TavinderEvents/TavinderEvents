@@ -214,8 +214,8 @@ console.log(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
           link: `https://taviarora.github.io/eventmarch2025/${occasionvar}/${fileName}`,
         },
         {
-          publicKey: "qcbXaXrWGMaIRt6_o",
-      privateKey: "g1HH-DK2771AldTTDT3Tk"
+          publicKey: "UUiVKSDERxZLzZndq",
+      privateKey: "4mpNv3RLNgDV8HQ_HmOMx"
           
         }
       );
