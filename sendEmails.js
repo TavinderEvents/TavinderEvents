@@ -110,12 +110,13 @@ async function sendEmails() {
       const reminderMessage = data.Reminder_Message;
 
       let fileName, occasionVar, subject, message;
+      let imageLink = "";
 
       // Check for exact match
       if (eventDay === todayDay && eventMonth === todayMonth) {
         switch (occasion) {
           case "Birthday":
-            const imageLink =
+            imageLink =
               birthdayImages[
               Math.floor(Math.random() * birthdayImages.length)
               ];
@@ -124,7 +125,7 @@ async function sendEmails() {
             subject = `Happy Birthday - ${toName}`;
             break;
           case "Anniversary":
-            const imageLink =
+            imageLink =
               anniversaryImages[
               Math.floor(Math.random() * anniversaryImages.length)
               ];
@@ -133,7 +134,7 @@ async function sendEmails() {
             subject = `Happy Anniversary - ${toName}`;
             break;
           case "Reminder":
-            const imageLink = reminderImage;
+            imageLink = reminderImage;
             occasionVar = "Reminders";
             message = reminderMessage;
             subject = `Reminder - ${reminderMessage}`;
@@ -163,7 +164,7 @@ async function sendEmails() {
         const reminderMonth = (reminderDate.getMonth() + 1).toString().padStart(2, '0');
 
         if (reminderDay === todayDay && reminderMonth === todayMonth) {
-          fileName = "reminder.jpg";
+          imageLink = reminderImage;
           occasionVar = "Reminders";
           message = reminderMessage;
           subject = `Upcoming Reminder - ${reminderMessage}`;
