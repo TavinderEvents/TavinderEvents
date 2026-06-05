@@ -79,15 +79,15 @@
             window.open('01-Event-Edit.html');
         }
 
-        function ModifytableButton() {  
+        function ModifytableButton() {
             window.open('02-Event-Table-Edit.html');
         }
 
         function ListData() {
             window.open('03-Event-List.html');
         }
-                function UpcomingEvents(){
-                      window.open('04-Upcoming-Events.html');
+        function UpcomingEvents() {
+            window.open('04-Upcoming-Events.html');
         }
     </script>
 
@@ -100,7 +100,7 @@
             // apiKey: "YOUR_API_KEY",
             // authDomain: "jwdatabase-f0e20.firebaseapp.com",
             // projectId: "jwdatabase-f0e20"
-                        apiKey: "AIzaSyDAHhKZEFIm4Z1HyTRGCaqJ1NGC7KelQ38",
+            apiKey: "AIzaSyDAHhKZEFIm4Z1HyTRGCaqJ1NGC7KelQ38",
             authDomain: "tavinderevents.firebaseapp.com",
             projectId: "tavinderevents"
         };
@@ -108,175 +108,16 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const BirthdayMessages = [
-            "Wishing you a birthday filled with joy, love, and laughter.",
-            "Happy Birthday! May your day be as wonderful as you are.",
-            "Wishing you happiness today and always. Happy Birthday!",
-            "May this special day bring you endless smiles and beautiful memories.",
-            "Happy Birthday! Wishing you health, success, and happiness.",
-            "Another year older, another year brighter. Happy Birthday!",
-            "Hope your birthday is filled with love, laughter, and good cheer.",
-            "Wishing you a day as special as your heart. Happy Birthday!",
-            "Happy Birthday! May all your dreams come true this year.",
-            "Sending warm wishes for a truly wonderful birthday.",
-            "May your birthday bring you peace, happiness, and countless blessings.",
-            "Happy Birthday! Enjoy every moment of your special day.",
-            "Wishing you a year full of joy and beautiful surprises.",
-            "Happy Birthday! May your smile shine brighter than ever today.",
-            "Hope your birthday is filled with unforgettable moments.",
-            "Wishing you love, laughter, and happiness on your birthday.",
-            "Happy Birthday! May every hour of today bring you joy.",
-            "Wishing you another year of success and cherished memories.",
-            "Happy Birthday! Celebrate big and smile even bigger.",
-            "May your birthday be filled with sunshine and happiness.",
-            "Happy Birthday! Wishing you love and laughter all year long.",
-            "May this birthday be the beginning of your best year yet.",
-            "Wishing you a birthday full of warmth, love, and joy.",
-            "Happy Birthday! May life bless you with endless happiness.",
-            "Hope your special day is as amazing as you are.",
-            "Happy Birthday! Here’s to another year of wonderful adventures.",
-            "Wishing you a birthday filled with sweet moments and happy memories.",
-            "Happy Birthday! May every wish you make come true.",
-            "Sending heartfelt wishes for a bright and beautiful birthday.",
-            "Wishing you happiness today and success in the year ahead.",
-            "Happy Birthday! May today bring you everything that makes you smile.",
-            "Wishing you love, peace, and laughter on your special day.",
-            "Happy Birthday! Enjoy every moment and make beautiful memories.",
-            "May your birthday be as joyful and lovely as your heart.",
-            "Wishing you a day filled with blessings and cheerful moments.",
-            "Happy Birthday! May this year bring you new hopes and new joys.",
-            "Wishing you endless happiness on your birthday and beyond.",
-            "Happy Birthday! Celebrate the wonderful person you are.",
-            "Hope today is filled with love, fun, and happy surprises.",
-            "Wishing you health, happiness, and many reasons to smile.",
-            "Happy Birthday! May your life be filled with love and laughter.",
-            "Wishing you a beautiful birthday and a fantastic year ahead.",
-            "Happy Birthday! May your heart be filled with joy today.",
-            "Wishing you countless blessings on your special day.",
-            "Happy Birthday! May your dreams take flight this year.",
-            "Wishing you sunshine, smiles, and happiness on your birthday.",
-            "Happy Birthday! May every moment today be truly special.",
-            "Wishing you love, success, and joy in abundance.",
-            "Happy Birthday! May your day be full of sweet surprises.",
-            "Wishing you a very happy birthday and a year full of blessings."
-        ];
+        const content = await fetch('./shared/eventContent.json')
+            .then(response => response.json());
 
-        const BirthdayImageLinks = [
-    "https://lh3.googleusercontent.com/d/15xUeHLWTigj0F8ZHN9gbGECPcnBTp53U",
-    "https://lh3.googleusercontent.com/d/1NF86srWm7HAdiY0gf_gFkdWcl8ZVBxTt",
-    "https://lh3.googleusercontent.com/d/1UV3ueC0B3pBE1omRSTRrAozH3qZ-LnpH",
-    "https://lh3.googleusercontent.com/d/14KBLiCd_EsXgJcmJulwzXhp5j4I5oELD",
-    "https://lh3.googleusercontent.com/d/1GnXEZF-NUdUbEirScGkS_arEdEHcJ9hw",
-    "https://lh3.googleusercontent.com/d/1qx09HbjHufA7kAi5O-L9fAethmQHnd1W",
-    "https://lh3.googleusercontent.com/d/13C85jaJbb6kpQnFIQBejAVOhEpE6IdAi",
-    "https://lh3.googleusercontent.com/d/1hP4dx7KfyqOAS3R85xUFcbcjFgTlMrtZ",
-    "https://lh3.googleusercontent.com/d/1fEYr6ZSiz5lgKhe5MA_GbJHYmLp3790h",
-    "https://lh3.googleusercontent.com/d/1_D86glWMfevsacqNI8VCzahp5i-EchGP",
-    "https://lh3.googleusercontent.com/d/1gEiDlCplTqk0SM88uyu0Z_pxqpDjydKa",
-    "https://lh3.googleusercontent.com/d/1PUCcgt3NntP-LAlHq61_w4pBam9RrmSk",
-    "https://lh3.googleusercontent.com/d/1OoV9NjyoyO4eUlmQjbGdOIz4lL5ekqPj",
-    "https://lh3.googleusercontent.com/d/19hQlA66XEnbSNlba4ppYXUHrfqZq1yST",
-    "https://lh3.googleusercontent.com/d/1yih6CNvas0X_mYJHBbLcD_Hb78aJQb_x",
-    "https://lh3.googleusercontent.com/d/1Tmc38J9Wn00ODLSbY3YYgTX41vsLE9Uo",
-    "https://lh3.googleusercontent.com/d/1ypyV9L3gF7HnucBEO7ZL1Ziuauye-os9",
-    "https://lh3.googleusercontent.com/d/1L7gGcCHN_miJqeGs4MWlqZQ-vQvd-vDO",
-    "https://lh3.googleusercontent.com/d/1BaJITPrzKbyObQK71U8FkGrOWswJdZLe",
-    "https://lh3.googleusercontent.com/d/1ScCZx38L9Gd3CqwouA_yRhWHtmAHbCrQ",
-    "https://lh3.googleusercontent.com/d/1MvqalcC3RLlazLs16sF7CcBxLuFEARGq",
-    "https://lh3.googleusercontent.com/d/1g2ffqnup8oVCFtb9MkahFcqgRKtRSo5O",
-    "https://lh3.googleusercontent.com/d/1pxj3f2tKYGEZc33xX79GEekweNVAQEpD",
-    "https://lh3.googleusercontent.com/d/1F4o3ZJnP263VfBK6lBa0L4Bg_3P7Xk4f",
-    "https://lh3.googleusercontent.com/d/1goQniT3sb17dmHNW1HEOeNY9AoosMccf",
-    "https://lh3.googleusercontent.com/d/1OSdO25QJpMjuAZid8OUEZQnGWZGeIShP",
-    "https://lh3.googleusercontent.com/d/1oze41XATI_MaENPSCnE1mpunX--2_XHY",
-    "https://lh3.googleusercontent.com/d/11crymdFTfuYj44LZ8IDNLQtI6hDWxPDc",
-    "https://lh3.googleusercontent.com/d/1SJzec_o1DI4V7p18nV5YG-RUlFvUtn2w",
-    "https://lh3.googleusercontent.com/d/1J7vne90YSTViW1Iu1RCVwuIz56m_uNTG",
-    "https://lh3.googleusercontent.com/d/1wR0x8GSrBixAgGdLHgUQAaITuSaeTSzx",
-    "https://lh3.googleusercontent.com/d/1_xNA2A5l6MCTqP_Iq7w-SDADUiohucuR",
-    "https://lh3.googleusercontent.com/d/1ULCSQ1SBqD6wC2n0-VSEiA8hgHctfH08",
-    "https://lh3.googleusercontent.com/d/1LSbOB4ZaCVVWKVC2D1mmxiIi64s5bQAD",
-    "https://lh3.googleusercontent.com/d/1GaeR-nQFcGCUsEq6gvVHo7saRPhlvh4I",
-    "https://lh3.googleusercontent.com/d/1jLEt33sA4aTpbf3aLrHpCCKsNxSiDr45",
-    "https://lh3.googleusercontent.com/d/1DuFv9OJJTNS80NspiQSeFVGp4rm-NptM",
-    "https://lh3.googleusercontent.com/d/1QY0Sp8_mTOkv7Fskhbhbmpcf2Hg2uHHe",
-    "https://lh3.googleusercontent.com/d/1xRtMd87h8VCZO-Eb4seuSJ51T9Ahye7L",
-    "https://lh3.googleusercontent.com/d/1IXNqK-lxLXlR4_0XSORY_bo5pehJk87t",
-    "https://lh3.googleusercontent.com/d/164ze9hnmHPVlW9iQUrnDq-ojzG_4jSSQ",
-    "https://lh3.googleusercontent.com/d/1rb_ximr1n-nkCn4mejk-MaDaD8SwB41M",
-    "https://lh3.googleusercontent.com/d/1rp8SFGkT_BhO5q1GeO5sjKD3H-3X3Cy2",
-    "https://lh3.googleusercontent.com/d/12X9e8v3URamxcflOx6E-yHtCicZf07jf",
-    "https://lh3.googleusercontent.com/d/114kp-4_1bStkN4kk7jxmokqt-JggWCYx"
-];
+        const BirthdayMessages = content.Birthday.messages;
+        const BirthdayImageLinks = content.Birthday.images;
 
-        const AnniversaryMessages = [
-            "Wishing you a lifetime of love, joy, and togetherness. Happy Anniversary.",
-            "Happy Anniversary! May your bond grow stronger with every passing year.",
-            "Wishing you both endless happiness and beautiful memories together.",
-            "Happy Anniversary! May love continue to light your journey.",
-            "Congratulations on another year of love, laughter, and companionship.",
-            "Wishing you both a joyful anniversary filled with love and smiles.",
-            "Happy Anniversary! May your hearts remain forever united.",
-            "May your special day be filled with cherished memories and happiness.",
-            "Wishing you another wonderful year of togetherness. Happy Anniversary.",
-            "Happy Anniversary! May your love story continue to inspire.",
-            "Sending warm wishes for a beautiful and memorable anniversary.",
-            "May your anniversary bring you peace, love, and endless joy.",
-            "Happy Anniversary! Wishing you many more years of happiness together.",
-            "Wishing you both a day filled with love and celebration.",
-            "Happy Anniversary! May every year bring you closer together.",
-            "Congratulations on celebrating another chapter of your beautiful journey.",
-            "Wishing you both love, laughter, and happiness today and always.",
-            "Happy Anniversary! May your love continue to blossom forever.",
-            "May this anniversary be as wonderful as the love you share.",
-            "Wishing you countless blessings on your special day. Happy Anniversary.",
-            "Happy Anniversary! Here’s to another year of beautiful memories.",
-            "Wishing you both a lifetime of happiness and togetherness.",
-            "Happy Anniversary! May your hearts always beat as one.",
-            "Sending heartfelt wishes for a joyful and love-filled anniversary.",
-            "May your anniversary be filled with warmth, laughter, and happiness.",
-            "Happy Anniversary! Wishing you endless love and cherished moments.",
-            "Congratulations on another year of sharing love and life together.",
-            "Wishing you both a wonderful anniversary and many more to come.",
-            "Happy Anniversary! May your journey together remain bright and beautiful.",
-            "Wishing you love, peace, and happiness on your special day.",
-            "Happy Anniversary! May every day ahead be filled with joy.",
-            "Sending best wishes for a happy and memorable anniversary celebration.",
-            "May your love continue to grow stronger with each passing year.",
-            "Happy Anniversary! Wishing you both endless joy and laughter.",
-            "Wishing you a day full of love and treasured moments together.",
-            "Happy Anniversary! May your lives always be blessed with love.",
-            "Congratulations on another year of happiness and shared dreams.",
-            "Wishing you both many more years of love and togetherness.",
-            "Happy Anniversary! May your bond remain forever strong.",
-            "May this anniversary bring you closer and fill your hearts with joy.",
-            "Wishing you both a beautiful day and a wonderful year ahead.",
-            "Happy Anniversary! May your love shine brighter every year.",
-            "Sending loving wishes for a truly special anniversary celebration.",
-            "May your anniversary be filled with laughter, love, and sweet memories.",
-            "Happy Anniversary! Wishing you both continued happiness and success.",
-            "Wishing you a lifetime of cherished moments and endless love.",
-            "Happy Anniversary! May your love story continue forever.",
-            "Congratulations on another year of love, trust, and happiness.",
-            "Wishing you both a joyful anniversary and many blessings ahead.",
-            "Happy Anniversary! May every moment together be filled with love."
-        ];
+        const AnniversaryMessages = content.Anniversary.messages;
+        const AnniversaryImageLinks = content.Anniversary.images;
 
-        const AnniversaryImageLinks = [
-        "https://lh3.googleusercontent.com/d/185a1FcOGb8g685-q0zDyM0a5SkHsTv_y",
-    "https://lh3.googleusercontent.com/d/1KxY2G1e-aEcRim4Ptlfaoa275GqTe9lu",
-    "https://lh3.googleusercontent.com/d/1--uNqRwb2HSlxLvfCtov8iDyDDRubr66",
-    "https://lh3.googleusercontent.com/d/1ylltHOQW4_hV1APaKkwqfwCNGMjqvHAx",
-    "https://lh3.googleusercontent.com/d/13zVhGn50XgaEwVCd996wpvpMT7alRbhJ",
-    "https://lh3.googleusercontent.com/d/1CyrpvxXmavOMnCzjIZJ7rlNbBpfKUkRI",
-    "https://lh3.googleusercontent.com/d/1vxMNfJrq16vTS_H3izQj50_lGdDb2Gfu",
-    "https://lh3.googleusercontent.com/d/1RpRUFGA2etOcPKg0DBFzM_0B5JJ1md6A",
-    "https://lh3.googleusercontent.com/d/13yiehki2AXAyDomLmsrVeHspPLbLvLER",
-    "https://lh3.googleusercontent.com/d/1jqYm8ptK0WyEvvxKTKUJE599k7sEDPyj",
-    "https://lh3.googleusercontent.com/d/1oOnQb7ZW3fP2wzq4b9Hhj1wFB4gtvQ-b",
-    "https://lh3.googleusercontent.com/d/1O8Mr69vCpOF4CpBSxEGowh5awtwghX8T",
-    "https://lh3.googleusercontent.com/d/1kLuTdA8npzFMUhyr-Pdqj2DJkIBmyC7Y"
-        ];
+        const ReminderImage = content.Reminder.image;
 
 
         // Initialize EmailJS
@@ -297,7 +138,7 @@
 
                 let found = false;
                 let sentIds = new Set();
-                
+
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     const key = data.Occasion + "_" + data.To_Email;
@@ -331,25 +172,25 @@
                         else if (data.Occasion === "Reminder-Self") {
                             subject = `Self Reminder ${data.Reminder_Message}`;
                             message = `Self Reminder ${data.Reminder_Message}`;
-                            link = "https://lh3.googleusercontent.com/d/16APCwvoaWrRNchvFW_PR9z0yVBtCTWwO";
+                            link = ReminderImage;
                         }
 
                         else if (data.Occasion === "Reminder") {
                             subject = `Reminder ${data.To_Name}`;
                             message = "Wishing you a joyful anniversary!";
-                            link = "https://lh3.googleusercontent.com/d/16APCwvoaWrRNchvFW_PR9z0yVBtCTWwO";
+                            link = ReminderImage;
                         }
 
                         else if (data.Occasion === "Reminder-Birthday") {
                             subject = `Reminder-Birthday ${data.To_Name}`;
                             message = `Birthday Wishes for ${data.To_Name}`;
-                            link = "https://lh3.googleusercontent.com/d/16APCwvoaWrRNchvFW_PR9z0yVBtCTWwO";
+                            link = ReminderImage;
                         }
 
                         else if (data.Occasion === "Reminder-Anniversary") {
                             subject = `Reminder-Anniversary ${data.To_Name}`;
                             message = `Anniversary Wishes for ${data.To_Name}`;
-                            link = "https://lh3.googleusercontent.com/d/16APCwvoaWrRNchvFW_PR9z0yVBtCTWwO";
+                            link = ReminderImage;
                         }
 
                         sendEmail(data.To_Email, subject, message, data.To_Gname, link);
