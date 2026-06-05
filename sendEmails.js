@@ -39,8 +39,8 @@ console.log(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
   
 
   const EMAILJS_SERVICE_ID = "service_jitwsrj";
-  const EMAILJS_TEMPLATE_ID = "template_m0u22pm";
-  const EMAILJS_USER_ID = "qcbXaXrWGMaIRt6_o";
+  const EMAILJS_TEMPLATE_ID = "template_8wpg95p";
+  const EMAILJS_USER_ID = "UUiVKSDERxZLzZndq";
 
   // Load Firebase config from environment variables
   const firebaseConfig = FIREBASE_CONFIG;
