@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Send WhatsApp</title>
+
+<style>
+body{
+    font-family:Arial;
+    max-width:600px;
+    margin:40px auto;
+    padding:20px;
+}
+input,textarea{
+    width:100%;
+    padding:10px;
+    margin-bottom:10px;
+}
+button{
+    background:#25D366;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    cursor:pointer;
+}
+#result{
+    margin-top:15px;
+}
+</style>
+
+</head>
+<body>
+
+<h2>Send WhatsApp</h2>
+
+<input
+    id="phone"
+    value="919810607799"
+    placeholder="Phone Number">
+
+<textarea
+    id="message"
+    rows="5"
+    placeholder="Message"></textarea>
+
+<button onclick="sendWhatsApp()">
+Send Message
+</button>
+
+<div id="result"></div>
+
+<script>
+
+async function sendWhatsApp(){
+
+    const phone =
+      document.getElementById("phone").value.trim();
+
+    const message =
+      document.getElementById("message").value.trim();
+
+    try{
+
+        const response = await fetch(
+            "/send-whatsapp",
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    phone,
+                    message
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if(result.success){
+            document.getElementById("result").innerHTML =
+                "✅ Message Sent";
+        }else{
+            document.getElementById("result").innerHTML =
+                "❌ " + JSON.stringify(result);
+        }
+
+    }catch(error){
+
+        document.getElementById("result").innerHTML =
+            error.message;
+
+    }
+
+}
+</script>
+
+</body>
+</html>

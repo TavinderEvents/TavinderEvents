@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WhatsApp Test</title>
+</head>
+<body>
+
+  <h2>Send WhatsApp Test Message</h2>
+
+  <input id="to" placeholder="9198xxxxxxx">
+  <br><br>
+
+  <textarea id="msg" placeholder="Message"></textarea>
+  <br><br>
+
+  <button onclick="sendMsg()">Send</button>
+
+  <script>
+    async function sendMsg() {
+      const to = document.getElementById("to").value;
+      const message = document.getElementById("msg").value;
+
+      const res = await fetch("http://localhost:3000/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          to,
+          message
+        })
+      });
+
+      const data = await res.json();
+      console.log(data);
+      alert(JSON.stringify(data));
+    }
+  </script>
+
+</body>
+</html>

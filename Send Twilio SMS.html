@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Twilio WhatsApp Test</title>
+</head>
+<body>
+  <h2>Send WhatsApp Test Message</h2>
+
+  <form id="msgForm">
+    <input type="text" id="to" placeholder="Recipient WhatsApp (e.g. +9715xxxxxxx)" required />
+    <br><br>
+
+    <textarea id="message" placeholder="Message" required></textarea>
+    <br><br>
+
+    <button type="submit">Send Message</button>
+  </form>
+
+  <p id="status"></p>
+
+  <script>
+    const form = document.getElementById("msgForm");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const to = document.getElementById("to").value;
+      const message = document.getElementById("message").value;
+
+      const res = await fetch("http://localhost:3000/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ to, message })
+      });
+
+      const data = await res.json();
+      console.log(data);
+
+// document.getElementById("status").innerText =
+//   data.message || data.status || JSON.stringify(data);
+
+  if (data.success) {
+  document.getElementById("status").innerText =
+    "Message sent successfully. SID: " + data.sid;
+} else {
+  document.getElementById("status").innerText =
+    "Failed to send message.";
+}
+    });
+  </script>
+</body>
+</html>

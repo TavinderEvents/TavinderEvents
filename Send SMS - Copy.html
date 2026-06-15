@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Send WhatsApp</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    max-width:600px;
+    margin:40px auto;
+    padding:20px;
+}
+
+input,textarea{
+    width:100%;
+    padding:10px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:4px;
+}
+
+button{
+    background:#25D366;
+    color:#fff;
+    border:none;
+    padding:12px 20px;
+    cursor:pointer;
+    border-radius:4px;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+#result{
+    margin-top:20px;
+}
+</style>
+
+</head>
+<body>
+
+<h2>Send WhatsApp Message</h2>
+
+<input
+    type="text"
+    id="phone"
+    value="919810607799"
+    placeholder="Phone Number">
+
+<textarea
+    id="message"
+    rows="6"
+    placeholder="Enter Message"></textarea>
+
+<button onclick="sendWhatsApp()">
+    Send WhatsApp
+</button>
+
+<div id="result"></div>
+
+<script>
+
+const API_URL =
+"https://us-central1-sikhsinindia.cloudfunctions.net/sendWhatsApp";
+
+async function sendWhatsApp(){
+
+    const phone =
+        document.getElementById("phone").value.trim();
+
+    const message =
+        document.getElementById("message").value.trim();
+
+    if(!phone || !message){
+        alert("Enter phone and message");
+        return;
+    }
+
+    document.getElementById("result").innerHTML =
+        "Sending...";
+
+    try{
+
+        const response = await fetch(API_URL,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                phone,
+                message
+            })
+        });
+
+        const result = await response.json();
+
+        if(result.success){
+            document.getElementById("result").innerHTML =
+                "✅ Message Sent";
+        }else{
+            document.getElementById("result").innerHTML =
+                "❌ " + JSON.stringify(result);
+        }
+
+    }catch(error){
+
+        document.getElementById("result").innerHTML =
+            "❌ " + error.message;
+
+    }
+}
+</script>
+
+</body>
+</html>
