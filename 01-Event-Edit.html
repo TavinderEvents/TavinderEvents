@@ -570,7 +570,7 @@ return Number(last) + 1;
             // reset first
             disableAll(false);
 
-            if (occasion === "ReminderSelf") {
+            if (occasion === "Reminder") {
 
                 // Hide all fields except Reminder Message and Date
                 otherFields.style.display = "none";
@@ -593,11 +593,11 @@ return Number(last) + 1;
                 reminderMessage.focus();
                 // reminderMessage = document.getElementById("Reminder_Message");   
 
-sendEmail(
-    document.getElementById("To_Email").value,
-    document.getElementById("Reminder_Message").value,
-    document.getElementById("To_Name").value
-);
+// sendEmail(
+//     document.getElementById("To_Email").value,
+//     document.getElementById("Reminder_Message").value,
+//     document.getElementById("To_Name").value
+// );
 
             }
 
