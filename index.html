@@ -173,31 +173,33 @@
                         else if (data.Occasion === "Anniversary") {
                             const RandomAnniversaryMessage = AnniversaryMessages[Math.floor(Math.random() * AnniversaryMessages.length)];
                             const AnniversaryRandomLink = AnniversaryImageLinks[Math.floor(Math.random() * AnniversaryImageLinks.length)];
-                            subject = `Happy Anniversary ${data.To_Name} - ${data.Date}`;
+                            subject = `Happy Anniversary ${data.To_Name} - ${formattedDate}`;
                             message = RandomAnniversaryMessage;
                             link = AnniversaryRandomLink;
                         }
                         else if (data.Occasion === "Reminder-Self") {
-                            subject = `Self Reminder ${data.Reminder_Message} - ${data.Date}`;
-                            message = `Self Reminder ${data.Reminder_Message} - ${data.Date}`;
+                                console.log("Reminder-Self matched");
+                                console.log("Occasion =", `"${data.Occasion}"`);
+                            subject = `Self Reminder ${data.Reminder_Message} - ${formattedDate}`;
+                            message = `Self Reminder ${data.Reminder_Message} - ${formattedDate}`;
                             link = ReminderImage;
                         }
 
                         else if (data.Occasion === "Reminder") {
-                            subject = `Reminder ${data.To_Name} - ${data.Date}`;
+                            subject = `Reminder ${data.To_Name} - ${formattedDate}`;
                             message = `Reminder Message: ${data.Reminder_Message}`;
                             link = ReminderImage;
                         }
 
                         else if (data.Occasion === "Reminder-Birthday") {
-                            subject = `Reminder-Birthday ${data.To_Name} - ${data.Date}`;
-                            message = `Birthday Wishes for ${data.To_Name} - ${data.Date}`;
+                            subject = `Reminder-Birthday ${data.To_Name} - ${formattedDate}`;
+                            message = `Birthday Wishes for ${data.To_Name} - ${formattedDate}`;
                             link = ReminderImage;
                         }
 
                         else if (data.Occasion === "Reminder-Anniversary") {
-                            subject = `Reminder-Anniversary ${data.To_Name} - ${data.Date}`;
-                            message = `Anniversary Wishes for ${data.To_Name} - ${data.Date}`;
+                            subject = `Reminder-Anniversary ${data.To_Name} - ${formattedDate}`;
+                            message = `Anniversary Wishes for ${data.To_Name} - ${formattedDate}`;
                             link = ReminderImage;
                         }
 
