@@ -143,6 +143,14 @@
                     const data = doc.data();
                     const key = data.Occasion + "_" + data.To_Email;
 
+
+                    const formattedDate = new Date(data.Date).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    }).replace(/ /g, '-');
+
+
                     if (sentIds.has(key)) return;
 
                     sentIds.add(key);
@@ -156,7 +164,7 @@
                             const RandomBirthdayMessage = BirthdayMessages[Math.floor(Math.random() * BirthdayMessages.length)];
                             const BirthdayRandomLink = BirthdayImageLinks[Math.floor(Math.random() * BirthdayImageLinks.length)];
 
-                            subject = `Happy Birthday - ${data.To_Name} - ${data.Date}`;
+                            subject = `Happy Birthday - ${data.To_Name} - ${formattedDate}`;
                             message = RandomBirthdayMessage;
                             link = BirthdayRandomLink;
 
