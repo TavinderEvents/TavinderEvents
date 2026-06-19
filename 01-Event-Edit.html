@@ -284,7 +284,7 @@ padding: 6px 6px 6px 38%;
 
                     <select id="Occasion" required style="flex:1; margin:0;">
                         <option value="">Select an Occasion</option>
-                        <option value="Reminder-Self">Reminder-Self</option>
+                        <option value="ReminderSelf">ReminderSelf</option>
                         <option value="Reminder-Birthday" selected>Reminder-Birthday</option>
                         <option value="Reminder-Anniversary">Reminder-Anniversary</option>
                         <option value="Birthday">Birthday</option>
@@ -570,7 +570,7 @@ return Number(last) + 1;
             // reset first
             disableAll(false);
 
-            if (occasion === "Reminder-Self") {
+            if (occasion === "ReminderSelf") {
 
                 // Hide all fields except Reminder Message and Date
                 otherFields.style.display = "none";

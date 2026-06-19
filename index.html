@@ -184,7 +184,9 @@
                         //     message = `Self Reminder ${data.Reminder_Message} - ${formattedDate}`;
                         //     link = ReminderImage;
                         // }
-                        else if (data.Occasion === "Reminder-Self") {
+                        else if (data.Occasion === "ReminderSelf") {
+                                                            console.log("ReminderSelf matched");
+                                console.log("Occasion =", `"${data.Occasion}"`);
                             subject = `Reminder ${data.To_Name} - ${formattedDate}`;
                             message = `Reminder Message: ${data.Reminder_Message}`;
                             link = ReminderImage;
