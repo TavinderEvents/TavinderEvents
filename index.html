@@ -177,11 +177,16 @@
                             message = RandomAnniversaryMessage;
                             link = AnniversaryRandomLink;
                         }
+                        // else if (data.Occasion === "Reminder-Self") {
+                        //         console.log("Reminder-Self matched");
+                        //         console.log("Occasion =", `"${data.Occasion}"`);
+                        //     subject = `Self Reminder ${data.Reminder_Message} - ${formattedDate}`;
+                        //     message = `Self Reminder ${data.Reminder_Message} - ${formattedDate}`;
+                        //     link = ReminderImage;
+                        // }
                         else if (data.Occasion === "Reminder-Self") {
-                                console.log("Reminder-Self matched");
-                                console.log("Occasion =", `"${data.Occasion}"`);
-                            subject = `Self Reminder ${data.Reminder_Message} - ${formattedDate}`;
-                            message = `Self Reminder ${data.Reminder_Message} - ${formattedDate}`;
+                            subject = `Reminder ${data.To_Name} - ${formattedDate}`;
+                            message = `Reminder Message: ${data.Reminder_Message}`;
                             link = ReminderImage;
                         }
 
