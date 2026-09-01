@@ -22,7 +22,7 @@
             margin: 0;
             padding: 10px;
             min-height: 100vh;
-            min-width: 1200px; /* Expands canvas for viewport-level horizontal scrollbar */
+            min-width: 1200px;
             display: flex;
             flex-direction: column;
         }
@@ -35,7 +35,7 @@
         .container {
             padding: 10px;
             width: 100%;
-            flex: 1 0 auto; /* Expands to push footer to the absolute bottom */
+            flex: 1 0 auto;
         }
 
         .table-responsive {
@@ -102,7 +102,6 @@
             background-color: #1f618d;
         }
 
-        /* Footer pinned to bottom of page viewport */
         footer {
             text-align: center;
             padding: 15px;
@@ -327,27 +326,51 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Initialize EmailJS
+// Initialize EmailJS — same configuration as index.html
 emailjs.init("UUiVKSDERxZLzZndq");
 
+// Load shared greeting content WITHOUT blocking the Event table.
+// The Event records must still load even if eventContent.json has a
+// temporary loading/path/network problem.
 let BirthdayMessages = [];
 let BirthdayImageLinks = [];
 let AnniversaryMessages = [];
 let AnniversaryImageLinks = [];
 let ReminderImage = "";
 
-async function loadContentConfig() {
+async function loadEventContent() {
     try {
-        const content = await fetch('./shared/eventContent.json').then(response => response.json());
-        BirthdayMessages = content.Birthday.messages;
-        BirthdayImageLinks = content.Birthday.images;
-        AnniversaryMessages = content.Anniversary.messages;
-        AnniversaryImageLinks = content.Anniversary.images;
-        ReminderImage = content.Reminder.image;
+        const response = await fetch('./shared/eventContent.json');
+
+        if (!response.ok) {
+            throw new Error(`Unable to load eventContent.json (${response.status})`);
+        }
+
+        const content = await response.json();
+
+        BirthdayMessages = Array.isArray(content?.Birthday?.messages)
+            ? content.Birthday.messages : [];
+
+        BirthdayImageLinks = Array.isArray(content?.Birthday?.images)
+            ? content.Birthday.images : [];
+
+        AnniversaryMessages = Array.isArray(content?.Anniversary?.messages)
+            ? content.Anniversary.messages : [];
+
+        AnniversaryImageLinks = Array.isArray(content?.Anniversary?.images)
+            ? content.Anniversary.images : [];
+
+        ReminderImage = content?.Reminder?.image || "";
+
+        console.log("eventContent.json loaded successfully.");
     } catch (err) {
-        console.error("Failed to load eventContent.json", err);
+        console.error("Error loading shared/eventContent.json:", err);
+        // Do NOT stop the page. Event records can still be displayed.
     }
 }
+
+// Start loading content in parallel with Event records.
+loadEventContent();
 
 let selectedOccasion = "";
 let selectedMonth = "";
@@ -460,76 +483,102 @@ window.sendMailForRecord = async function(docId) {
         alert("Recipient email is missing for this record.");
         return;
     }
-
-    let formattedDate = "";
-    if (data.Date) {
-        formattedDate = new Date(data.Date).toLocaleDateString('en-GB', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric'
-        }).replace(/ /g, '-');
-    }
-
+const formattedDate = data.Date
+    ? (() => {
+        const d = new Date(data.Date);
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return `${String(d.getDate()).padStart(2, '0')}-${months[d.getMonth()]}-${d.getFullYear()}`;
+    })()
+    : "";
+    
     let subject = "";
     let message = "";
     let link = "";
 
+    // IMPORTANT:
+    // This is the same random-selection logic used by index.html.
+    // A Birthday email gets one random Birthday message AND one random
+    // Birthday greeting-card link. Anniversary works the same way.
     if (data.Occasion === "Birthday") {
-        const RandomBirthdayMessage = BirthdayMessages.length > 0 
-            ? BirthdayMessages[Math.floor(Math.random() * BirthdayMessages.length)] 
-            : "Happy Birthday!";
-        const BirthdayRandomLink = BirthdayImageLinks.length > 0 
-            ? BirthdayImageLinks[Math.floor(Math.random() * BirthdayImageLinks.length)] 
-            : "";
+        if (!BirthdayMessages.length || !BirthdayImageLinks.length) {
+            alert("Birthday greeting content could not be loaded from shared/eventContent.json.");
+            return;
+        }
 
-        subject = `Happy Birthday - ${data.To_Name || ''} - ${formattedDate}`;
+        const RandomBirthdayMessage =
+            BirthdayMessages[Math.floor(Math.random() * BirthdayMessages.length)];
+
+        const BirthdayRandomLink =
+            BirthdayImageLinks[Math.floor(Math.random() * BirthdayImageLinks.length)];
+
+        subject = `Happy Birthday - ${data.To_Name} - ${formattedDate}`;
         message = RandomBirthdayMessage;
         link = BirthdayRandomLink;
-    } 
-    else if (data.Occasion === "Anniversary") {
-        const RandomAnniversaryMessage = AnniversaryMessages.length > 0 
-            ? AnniversaryMessages[Math.floor(Math.random() * AnniversaryMessages.length)] 
-            : "Happy Anniversary!";
-        const AnniversaryRandomLink = AnniversaryImageLinks.length > 0 
-            ? AnniversaryImageLinks[Math.floor(Math.random() * AnniversaryImageLinks.length)] 
-            : "";
+    }
 
-        subject = `Happy Anniversary ${data.To_Name || ''} - ${formattedDate}`;
+    else if (data.Occasion === "Anniversary") {
+        if (!AnniversaryMessages.length || !AnniversaryImageLinks.length) {
+            alert("Anniversary greeting content could not be loaded from shared/eventContent.json.");
+            return;
+        }
+
+        const RandomAnniversaryMessage =
+            AnniversaryMessages[Math.floor(Math.random() * AnniversaryMessages.length)];
+
+        const AnniversaryRandomLink =
+            AnniversaryImageLinks[Math.floor(Math.random() * AnniversaryImageLinks.length)];
+
+        subject = `Happy Anniversary ${data.To_Name} - ${formattedDate}`;
         message = RandomAnniversaryMessage;
         link = AnniversaryRandomLink;
-    } 
-    else if (data.Occasion === "ReminderSelf") {
-        subject = `Reminder ${data.To_Name || ''} - ${formattedDate}`;
-        message = `Reminder Message: ${data.Reminder_Message || ''}`;
-        link = ReminderImage;
-    } 
-    else if (data.Occasion === "Reminder") {
-        subject = `Reminder ${data.To_Name || ''} - ${formattedDate}`;
-        message = `Reminder Message: ${data.Reminder_Message || ''}`;
-        link = ReminderImage;
-    } 
-    else if (data.Occasion === "Reminder-Birthday") {
-        subject = `Reminder-Birthday ${data.To_Name || ''} - ${formattedDate}`;
-        message = `Birthday Wishes for ${data.To_Name || ''} - ${formattedDate}`;
-        link = ReminderImage;
-    } 
-    else if (data.Occasion === "Reminder-Anniversary") {
-        subject = `Reminder-Anniversary ${data.To_Name || ''} - ${formattedDate}`;
-        message = `Anniversary Wishes for ${data.To_Name || ''} - ${formattedDate}`;
-        link = ReminderImage;
     }
-    else {
-        subject = `Event Notification - ${formattedDate}`;
-        message = data.Reminder_Message || "Event Notification";
+
+    else if (data.Occasion === "ReminderSelf") {
+        subject = `Reminder ${data.To_Name} - ${formattedDate}`;
+        message = `Reminder Message: ${data.Reminder_Message}`;
         link = ReminderImage;
     }
 
+    else if (data.Occasion === "Reminder") {
+        subject = `Reminder ${data.To_Name} - ${formattedDate}`;
+        message = `Reminder Message: ${data.Reminder_Message}`;
+        link = ReminderImage;
+    }
+
+    else if (data.Occasion === "Reminder-Birthday") {
+        subject = `Reminder-Birthday ${data.To_Name} - ${formattedDate}`;
+        message = `Birthday Wishes for ${data.To_Name} - ${formattedDate}`;
+        link = ReminderImage;
+    }
+
+    else if (data.Occasion === "Reminder-Anniversary") {
+        subject = `Reminder-Anniversary ${data.To_Name} - ${formattedDate}`;
+        message = `Anniversary Wishes for ${data.To_Name} - ${formattedDate}`;
+        link = ReminderImage;
+    }
+
+    else {
+        alert(`Unsupported occasion: ${data.Occasion || "(blank)"}`);
+        return;
+    }
+
+    // Same greeting-name field used by index.html.
+    const recipientName = data.To_Gname;
+
     try {
-        await sendEmail(data.To_Email, subject, message, data.To_Gname || data.To_Name || '', link);
+        await sendEmail(
+            data.To_Email,
+            subject,
+            message,
+            recipientName,
+            link
+        );
+
         alert(`Email sent successfully to ${data.To_Email}!`);
     } catch (err) {
         console.error("Failed to send email:", err);
-        alert("Failed to send email. Please check console for details.");
+        alert("Failed to send email. Check browser console for errors.");
     }
 };
 
@@ -570,7 +619,6 @@ document.getElementById("nameFilter").addEventListener("input", e => {
     renderTable();
 });
 
-await loadContentConfig();
 populateOccasionFilter();
 getEvent();
 
