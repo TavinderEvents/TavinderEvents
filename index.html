@@ -67,6 +67,8 @@
         <button onclick="AddEventsButton()">Add Event</button>
         <button onclick="ModifytableButton()">Modify Table</button>
         <button onclick="ListData()">List Data</button>
+        <button onclick="DeleteData()">Delete Data</button>
+                <button onclick="SendMail()">Send Email</button>
         <button onclick="UpcomingEvents()">Check Upcoming Events</button>
         <button onclick="checkAndSendEmails()">Check Today's Events</button>
     </div>
@@ -86,9 +88,19 @@
         function ListData() {
             window.open('03-Event-List.html');
         }
-        function UpcomingEvents() {
-            window.open('04-Upcoming-Events.html');
+
+        function DeleteData() {
+            window.open('04-Event-Delete.html');
         }
+
+        function SendMail() {
+            window.open('05-SendMail.html');
+        }
+
+        function UpcomingEvents() {
+            window.open('06-Upcoming-Events.html');
+        }
+
     </script>
 
     <!-- Firebase + Main Logic -->

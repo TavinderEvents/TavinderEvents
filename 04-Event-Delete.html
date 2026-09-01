@@ -11,7 +11,7 @@
             box-sizing: border-box;
         }
 
-        /* Allow natural viewport-level horizontal scrolling */
+        /* Allow natural horizontal scrolling at the window level */
         html {
             overflow-x: auto;
         }
@@ -20,7 +20,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 10px;
-            min-width: 1200px; /* Expands body canvas so browser horizontal scrollbar rests at screen bottom */
+            min-width: 1200px; /* Forces page width so the window scrollbar sits at the bottom */
         }
 
         h1 {
@@ -58,7 +58,7 @@
 
         th:last-child, td:last-child {
             text-align: center;
-            width: 120px;
+            width: 100px;
         }
 
         .filter-container {
@@ -87,21 +87,14 @@
             background-color: darkred;
         }
 
-        .btn-edit {
-            background-color: #f39c12;
+        .btn-delete {
+            background-color: #e74c3c;
             color: white;
             font-weight: bold;
         }
 
-        .btn-save {
-            background-color: #27ae60;
-            color: white;
-            font-weight: bold;
-        }
-
-        .btn-cancel {
-            background-color: #7f8c8d;
-            color: white;
+        .btn-delete:hover {
+            background-color: #c0392b;
         }
 
         footer {
@@ -114,13 +107,6 @@
 
         footer button {
             background-color: maroon;
-        }
-
-        .inline-edit-input, .inline-edit-select {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 4px;
-            font-size: 13px;
         }
 
         /* Mobile View (Card Layout) */
@@ -214,7 +200,6 @@
                 font-size: 12px;
             }
 
-            /* Disable pseudo label for the actions cell in mobile card view */
             #eventTable td:last-child:before {
                 content: "" !important;
             }
@@ -238,11 +223,6 @@
                 width: 100%;
                 margin: 4px 0;
                 padding: 8px;
-            }
-
-            .inline-edit-input, .inline-edit-select {
-                font-size: 14px;
-                padding: 6px;
             }
         }
     </style>
@@ -319,7 +299,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDAHhKZEFIm4Z1HyTRGCaqJ1NGC7KelQ38",
@@ -338,10 +318,6 @@ let selectedOccasion = "";
 let selectedMonth = "";
 let searchName = "";
 let allEventsCache = [];
-
-const occasionOptions = ["ReminderSelf", "Reminder-Birthday", "Reminder-Anniversary", "Birthday", "Anniversary", "Reminder"];
-const relationOptions = ["Self", "Friend", "Colleague", "Father", "Mother", "Brother", "Sister", "Son", "Daughter"];
-const recurringOptions = ["Yearly", "Monthly", "Weekly"];
 
 async function getEvent() {
     const eventList = document.getElementById("eventList");
@@ -407,7 +383,6 @@ function renderTable() {
 
     filteredEvents.forEach(event => {
         const row = document.createElement("tr");
-        row.setAttribute("id", `row-${event.id}`);
 
         row.innerHTML = `
             <td>${event.SNo ?? ""}</td>
@@ -424,7 +399,7 @@ function renderTable() {
             <td>${event.Reminder_Message ?? ""}</td>
             <td>${event.Date ?? ""}</td>
             <td>
-                <button class="btn-edit" onclick="enableRowEditing('${event.id}')">Edit</button>
+                <button class="btn-delete" onclick="confirmDeleteEvent('${event.id}', '${event.SNo ?? ''}')">Delete</button>
             </td>
         `;
 
@@ -432,70 +407,17 @@ function renderTable() {
     });
 }
 
-window.enableRowEditing = function(docId) {
-    const event = allEventsCache.find(e => e.id === docId);
-    if (!event) return;
-
-    const row = document.getElementById(`row-${docId}`);
-
-    const createSelect = (options, currentValue) => {
-        let html = `<select class="inline-edit-select">`;
-        options.forEach(opt => {
-            const selected = opt === currentValue ? 'selected' : '';
-            html += `<option value="${opt}" ${selected}>${opt}</option>`;
-        });
-        html += `</select>`;
-        return html;
-    };
-
-    row.innerHTML = `
-        <td><input type="number" class="inline-edit-input" value="${event.SNo ?? ''}"></td>
-        <td>${createSelect(occasionOptions, event.Occasion)}</td>
-        <td><input type="text" class="inline-edit-input" value="${event.From_Name ?? ''}"></td>
-        <td><input type="email" class="inline-edit-input" value="${event.From_Email ?? ''}"></td>
-        <td><input type="text" class="inline-edit-input" value="${event.From_Mobile ?? ''}"></td>
-        <td><input type="text" class="inline-edit-input" value="${event.To_Name ?? ''}"></td>
-        <td><input type="text" class="inline-edit-input" value="${event.To_Gname ?? ''}"></td>
-        <td><input type="email" class="inline-edit-input" value="${event.To_Email ?? ''}"></td>
-        <td><input type="text" class="inline-edit-input" value="${event.To_Mobile ?? ''}"></td>
-        <td>${createSelect(relationOptions, event.Relation)}</td>
-        <td>${createSelect(recurringOptions, event.Recurring)}</td>
-        <td><input type="text" class="inline-edit-input" value="${event.Reminder_Message ?? ''}"></td>
-        <td><input type="date" class="inline-edit-input" value="${event.Date ?? ''}"></td>
-        <td>
-            <button class="btn-save" onclick="saveRow('${docId}')">Save</button>
-            <button class="btn-cancel" onclick="renderTable()">Cancel</button>
-        </td>
-    `;
-};
-
-window.saveRow = async function(docId) {
-    const row = document.getElementById(`row-${docId}`);
-    const inputs = row.querySelectorAll("input, select");
-
-    const updatedData = {
-        SNo: Number(inputs[0].value),
-        Occasion: inputs[1].value,
-        From_Name: inputs[2].value,
-        From_Email: inputs[3].value,
-        From_Mobile: inputs[4].value,
-        To_Name: inputs[5].value,
-        To_Gname: inputs[6].value,
-        To_Email: inputs[7].value,
-        To_Mobile: inputs[8].value,
-        Relation: inputs[9].value,
-        Recurring: inputs[10].value,
-        Reminder_Message: inputs[11].value,
-        Date: inputs[12].value
-    };
-
-    try {
-        await updateDoc(doc(db, "Event", docId), updatedData);
-        alert("Record updated successfully!");
-        await getEvent();
-    } catch (error) {
-        console.error("Error updating document: ", error);
-        alert("Failed to update record.");
+window.confirmDeleteEvent = async function(docId, sno) {
+    const isConfirmed = confirm(`Are you sure you want to delete event record (S.No: ${sno})?`);
+    if (isConfirmed) {
+        try {
+            await deleteDoc(doc(db, "Event", docId));
+            alert("Record deleted successfully!");
+            await getEvent();
+        } catch (error) {
+            console.error("Error deleting event:", error);
+            alert("Failed to delete record.");
+        }
     }
 };
 
