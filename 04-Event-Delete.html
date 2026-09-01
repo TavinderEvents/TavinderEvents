@@ -11,8 +11,9 @@
             box-sizing: border-box;
         }
 
-        /* Allow natural horizontal scrolling at the window level */
+        /* Allow viewport height and natural horizontal scrolling */
         html {
+            height: 100%;
             overflow-x: auto;
         }
 
@@ -20,7 +21,10 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 10px;
-            min-width: 1200px; /* Forces page width so the window scrollbar sits at the bottom */
+            min-height: 100vh;
+            min-width: 1200px; /* Expands canvas for viewport-level horizontal scrollbar */
+            display: flex;
+            flex-direction: column;
         }
 
         h1 {
@@ -31,6 +35,7 @@
         .container {
             padding: 10px;
             width: 100%;
+            flex: 1 0 auto; /* Expands to push footer to the absolute bottom */
         }
 
         .table-responsive {
@@ -97,12 +102,17 @@
             background-color: #c0392b;
         }
 
+        /* Footer pinned to bottom of page viewport */
         footer {
             text-align: center;
             padding: 15px;
             background-color: #333;
             color: white;
-            margin-top: 20px;
+            margin-top: auto;
+            position: sticky;
+            bottom: 0;
+            width: 100%;
+            z-index: 100;
         }
 
         footer button {

@@ -11,8 +11,9 @@
             box-sizing: border-box;
         }
 
-        /* Allow natural viewport-level horizontal scrolling */
+        /* Full viewport height layout */
         html {
+            height: 100%;
             overflow-x: auto;
         }
 
@@ -20,7 +21,10 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 10px;
-            min-width: 1200px; /* Expands body canvas so browser horizontal scrollbar rests at screen bottom */
+            min-height: 100vh;
+            min-width: 1200px; /* Forces full canvas width for browser horizontal scrollbar */
+            display: flex;
+            flex-direction: column;
         }
 
         h1 {
@@ -31,6 +35,7 @@
         .container {
             padding: 10px;
             width: 100%;
+            flex: 1 0 auto; /* Pushes footer down to the very bottom */
         }
 
         .table-responsive {
@@ -104,12 +109,17 @@
             color: white;
         }
 
+        /* Sticky Footer pinned to bottom of the viewport page */
         footer {
             text-align: center;
             padding: 15px;
             background-color: #333;
             color: white;
-            margin-top: 20px;
+            margin-top: auto;
+            position: sticky;
+            bottom: 0;
+            width: 100%;
+            z-index: 100;
         }
 
         footer button {
@@ -214,7 +224,6 @@
                 font-size: 12px;
             }
 
-            /* Disable pseudo label for the actions cell in mobile card view */
             #eventTable td:last-child:before {
                 content: "" !important;
             }
