@@ -455,7 +455,12 @@ function renderTable() {
             <td>${event.Relation ?? ""}</td>
             <td>${event.Recurring ?? ""}</td>
             <td>${event.Reminder_Message ?? ""}</td>
-            <td>${event.Date ?? ""}</td>
+            <td>${event.Date ? (() => {
+                const d = new Date(event.Date);
+                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                return isNaN(d) ? event.Date : `${String(d.getDate()).padStart(2, "0")}-${months[d.getMonth()]}-${d.getFullYear()}`;
+            })() : ""}</td>
             <td>
                 <button class="btn-send-mail" onclick="sendMailForRecord('${event.id}')">Send Mail</button>
             </td>
